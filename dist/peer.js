@@ -1138,7 +1138,7 @@ var util = {
 
   // Lists which features are supported
   supports: (function() {
-    if (typeof RTCPeerConnection === 'undefined') {
+    if (typeof exports.RTCPeerConnection === 'undefined') {
       return {};
     }
 
@@ -1151,7 +1151,7 @@ var util = {
 
     var pc, dc;
     try {
-      pc = new RTCPeerConnection(defaultConfig, {optional: [{RtpDataChannels: true}]});
+      pc = new exports.RTCPeerConnection(defaultConfig, {optional: [{RtpDataChannels: true}]});
     } catch (e) {
       data = false;
       audioVideo = false;
@@ -1176,7 +1176,7 @@ var util = {
       // Reliable test.
       // Unfortunately Chrome is a bit unreliable about whether or not they
       // support reliable.
-      var reliablePC = new RTCPeerConnection(defaultConfig, {});
+      var reliablePC = new exports.RTCPeerConnection(defaultConfig, {});
       try {
         var reliableDC = reliablePC.createDataChannel('_PEERJSRELIABLETEST', {});
         sctp = reliableDC.reliable;
@@ -1194,7 +1194,7 @@ var util = {
     // av-only browsers (?).
     if (!onnegotiationneeded && data) {
       // sync default check.
-      var negotiationPC = new RTCPeerConnection(defaultConfig, {optional: [{RtpDataChannels: true}]});
+      var negotiationPC = new exports.RTCPeerConnection(defaultConfig, {optional: [{RtpDataChannels: true}]});
       negotiationPC.onnegotiationneeded = function() {
         onnegotiationneeded = true;
         // async check.
@@ -1258,8 +1258,8 @@ var util = {
     }
     return dest;
   },
-  pack: BinaryPack.pack,
-  unpack: BinaryPack.unpack,
+  pack: exports.BinaryPack.pack,
+  unpack: exports.BinaryPack.unpack,
 
   log: function () {
     if (util.debug) {
@@ -2195,7 +2195,7 @@ Negotiator._addProvider = function(provider) {
 
 /** Start a PC. */
 Negotiator._startPeerConnection = function(connection) {
-  util.log('Creating RTCPeerConnection.');
+  util.log('Creating exports.RTCPeerConnection.');
 
   var id = Negotiator._idPrefix + util.randomToken();
   var optional = {};
@@ -2207,7 +2207,7 @@ Negotiator._startPeerConnection = function(connection) {
     optional = {optional: [{DtlsSrtpKeyAgreement: true}]};
   }
 
-  var pc = new RTCPeerConnection(connection.provider.options.config, optional);
+  var pc = new exports.RTCPeerConnection(connection.provider.options.config, optional);
   Negotiator.pcs[connection.type][connection.peer][id] = pc;
 
   Negotiator._setupListeners(connection, pc, id);
